@@ -1,0 +1,28 @@
+{
+  "name": "y",
+  "version": "0.1.0",
+  "description": "Tiny JavaScript library to handle state update subscription",
+  "main": "magasin.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "minify": "uglifyjs --compress  -o magasin.min.js -- magasin.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/tzi/magasin.git"
+  },
+  "keywords": [
+    "state",
+    "store",
+    "subscription"
+  ],
+  "author": "Thomas Zilliox <https://tzi.fr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tzi/magasin/issues"
+  },
+  "homepage": "https://github.com/tzi/magasin#readme",
+  "devDependencies": {
+    "uglify-js": "^3.3.13"
+  }
+}
