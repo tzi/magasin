@@ -1,5 +1,5 @@
 {
-  "name": "y",
+  "name": "magasin",
   "version": "0.1.0",
   "description": "Tiny JavaScript library to handle state update subscription",
   "main": "magasin.js",
