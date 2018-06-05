@@ -151,7 +151,7 @@ export default function() {
 
     function handleChange() {
       var previousSelection = selection;
-      selection = selector(seed);
+      selection = select(seed, selector).every(Boolean);
       if (!previousSelection && selection) {
         onTrue(unsubscribe, seed);
       }
