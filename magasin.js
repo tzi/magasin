@@ -129,7 +129,7 @@ var magasin = (function () {
     }
 
     function onUpdate (selector, onChange) {
-      var selection = {}
+      var selection
 
       function handleChange () {
         var previousSelection = selection
