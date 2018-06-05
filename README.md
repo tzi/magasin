@@ -1,4 +1,6 @@
-# magasin
+# magasin 
+
+[![Build Status](https://travis-ci.org/tzi/magasin.svg?branch=master)](https://travis-ci.org/tzi/magasin)
 
 Tiny JavaScript library to handle state update subscription.
 
