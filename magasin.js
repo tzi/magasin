@@ -1,9 +1,6 @@
 var magasin = (function () {
   var just = (function () {
     function set (obj, props, value) {
-      if (typeof props == 'string') {
-        props = props.split('.')
-      }
       var lastProp = props.pop()
       if (!lastProp) {
         return false
@@ -131,13 +128,6 @@ var magasin = (function () {
       return state
     }
 
-    function set (key, value) {
-      just.set(state, key, value)
-      handlers.forEach(function (handler) {
-        handler()
-      })
-    }
-
     function onUpdate (selector, onChange) {
       var selection = {}
 
@@ -171,13 +161,35 @@ var magasin = (function () {
       handleChange()
     }
 
-    return {
-      getState: getState,
-      set: set,
-      subscribe: {
+    function write (scope) {
+      function update (props, value) {
+        if (typeof props == 'string') {
+          props = props.split('.')
+        }
+        props.unshift(scope)
+
+        just.set(state, props, value)
+        handlers.forEach(function (handler) {
+          handler()
+        })
+      }
+
+      return {
+        update: update
+      }
+    }
+
+    function read () {
+      return {
         onUpdate: onUpdate,
         onMatch: onMatch,
       }
+    }
+
+    return {
+      getState: getState,
+      write: write,
+      read: read,
     }
   }
 })()
