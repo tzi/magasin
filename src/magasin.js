@@ -121,7 +121,7 @@ function select(seed, selector) {
 
 export default function() {
   var seed = {};
-  var handlers = [];
+  var handlers = {};
 
   function getSeed() {
     return seed;
@@ -134,12 +134,16 @@ export default function() {
       var previousSelection = selection;
       selection = select(seed, selector);
       if (!just.compare(previousSelection, selection)) {
-        onChange.apply(this, selection.concat([seed]));
+        onChange.apply(this, selection.concat([unsubscribe, seed]));
       }
     }
 
-    handlers.push(handleChange);
+    var id = Date.now() + Math.random();
+    handlers[id] = handleChange;
+    var unsubscribe = () => delete handlers[id];
     handleChange();
+
+    return unsubscribe;
   }
 
   function onMatch(selector, onTrue, onFalse) {
@@ -149,15 +153,19 @@ export default function() {
       var previousSelection = selection;
       selection = selector(seed);
       if (!previousSelection && selection) {
-        onTrue(seed);
+        onTrue(unsubscribe, seed);
       }
       if (onFalse && previousSelection && !selection) {
-        onFalse(seed);
+        onFalse(unsubscribe, seed);
       }
     }
 
-    handlers.push(handleChange);
+    var id = Date.now() + Math.random();
+    handlers[id] = handleChange;
+    var unsubscribe = () => delete handlers[id];
     handleChange();
+
+    return unsubscribe;
   }
 
   function addState(scope) {
@@ -173,7 +181,7 @@ export default function() {
     function update(props, value) {
       props = prefix(props);
       just.set(seed, props, value);
-      handlers.forEach(function(handler) {
+      Object.values(handlers).forEach(function(handler) {
         handler();
       });
     }
