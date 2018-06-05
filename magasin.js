@@ -162,19 +162,33 @@ var magasin = (function () {
     }
 
     function write (scope) {
-      function update (props, value) {
+      state[scope] = {}
+
+      function prefix (props) {
         if (typeof props == 'string') {
           props = props.split('.')
         }
         props.unshift(scope)
 
+        return props
+      }
+
+      function update (props, value) {
+        props = prefix(props)
         just.set(state, props, value)
         handlers.forEach(function (handler) {
           handler()
         })
       }
 
+      function get (props) {
+        props = prefix(props)
+
+        return just.get(state, props)
+      }
+
       return {
+        get: get,
         update: update
       }
     }
