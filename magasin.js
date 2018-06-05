@@ -2,7 +2,7 @@ var magasin = (function () {
   var just = (function () {
     function set (obj, props, value) {
       var lastProp = props.pop()
-      if (!lastProp) {
+      if (typeof lastProp === 'undefined') {
         return false
       }
       var thisProp
