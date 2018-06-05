@@ -133,6 +133,7 @@ function select(seed, selector) {
 }
 
 export default function() {
+  var maxId = 1;
   var seed = {};
   var handlers = {};
 
@@ -143,18 +144,25 @@ export default function() {
   function onUpdate(selector, onChange) {
     var selection;
 
-    function handleChange() {
+    function check() {
       var previousSelection = selection;
-      selection = select(seed, selector);
+      update();
       if (!just.compare(previousSelection, selection)) {
         onChange.apply(this, selection.concat([unsubscribe, seed]));
       }
     }
 
-    var id = Date.now() + Math.random();
-    handlers[id] = handleChange;
+    function update() {
+      selection = select(seed, selector);
+    }
+
+    var id = maxId++;
+    handlers[id] = {
+      check,
+      update
+    };
     var unsubscribe = () => delete handlers[id];
-    handleChange();
+    update();
 
     return unsubscribe;
   }
@@ -173,7 +181,7 @@ export default function() {
       }
     }
 
-    var id = Date.now() + Math.random();
+    var id = maxId++;
     handlers[id] = handleChange;
     var unsubscribe = () => delete handlers[id];
     handleChange();
@@ -195,7 +203,7 @@ export default function() {
       props = prefix(props);
       just.set(seed, props, value);
       Object.values(handlers).forEach(function(handler) {
-        handler();
+        handler.check();
       });
     }
 
@@ -207,6 +215,9 @@ export default function() {
 
     return function initState(state = {}) {
       seed[scope] = state;
+      Object.values(handlers).forEach(function(handler) {
+        handler.update();
+      });
 
       return {
         get: get,
@@ -227,4 +238,4 @@ export default function() {
     addState: addState,
     getListener: getListener
   };
-}
+};
