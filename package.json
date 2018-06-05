@@ -1,6 +1,6 @@
 {
   "name": "magasin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Tiny JavaScript library to handle state update subscription",
   "main": "src/magasin.js",
   "scripts": {
