@@ -12,7 +12,8 @@ describe('Magasin', () => {
     state = store.addState('character')({
       firstName: 'FitzChevalerie',
       lastName: 'Loinvoyant',
-      where: 'Royaume des montagnes'
+      where: 'Royaume des montagnes',
+      main: true
     })
   });
 
@@ -41,6 +42,14 @@ describe('Magasin', () => {
       state.update('firstName', 'Fitz');
 
       assert.equal(count, 3);
+    });
+  });
+
+  describe('.onMatch()', () => {
+    it('should directly match', () => {
+      listener.onMatch('character.main', () => {
+        assert.ok(true);
+      });
     });
   });
 });

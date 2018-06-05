@@ -10,7 +10,9 @@ Highlights:
 
 ## Installation
 
-TODO
+```sh
+npm install magasin --save
+```
 
 ## Modular Architecture Example
 
@@ -19,6 +21,10 @@ TODO
 ## API
 
 TODO
+
+## Links
+
+ - [TravisCI](https://travis-ci.org/tzi/magasin)
 
 ## License
 
