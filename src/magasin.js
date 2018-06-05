@@ -132,7 +132,7 @@ function select(seed, selector) {
   });
 }
 
-export default function() {
+module.exports = function() {
   var maxId = 1;
   var seed = {};
   var handlers = {};

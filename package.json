@@ -2,9 +2,8 @@
   "name": "magasin",
   "version": "0.1.0",
   "description": "Tiny JavaScript library to handle state update subscription",
-  "main": "lib/magasin.js",
+  "main": "src/magasin.js",
   "scripts": {
-    "build": "babel src -d lib",
     "format": "prettier --write src/*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,8 +23,6 @@
   },
   "homepage": "https://github.com/tzi/magasin#readme",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
     "prettier": "^1.13.4"
   }
 }
