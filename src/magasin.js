@@ -1,20 +1,33 @@
 var just = (function() {
-  function set(obj, props, value) {
+  function set(rootObj, props, value) {
     var lastProp = props.pop();
     if (typeof lastProp === "undefined") {
       return false;
     }
+    var obj = rootObj;
     var thisProp;
+    var breadcrumb = [];
     while ((thisProp = props.shift())) {
       if (typeof obj[thisProp] == "undefined") {
         obj[thisProp] = {};
       }
       obj = obj[thisProp];
+      breadcrumb.push(thisProp);
       if (!obj || typeof obj != "object") {
         return false;
       }
     }
-    obj[lastProp] = value;
+    if (obj[lastProp] !== value) {
+      if ({}.toString.call(value) == "[object Object]") {
+        breadcrumb.push(lastProp);
+      }
+      obj[lastProp] = value;
+      obj = rootObj;
+      while ((thisProp = breadcrumb.shift())) {
+        obj[thisProp] = Object.assign({}, obj[thisProp]);
+        obj = obj[thisProp];
+      }
+    }
     return true;
   }
 
