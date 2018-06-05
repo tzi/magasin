@@ -99,9 +99,9 @@ var just = (function() {
   };
 })();
 
-function select(state, selector) {
+function select(seed, selector) {
   if (typeof selector === "function") {
-    var result = selector(state);
+    var result = selector(seed);
     if (!Array.isArray(result)) {
       return [result];
     }
@@ -115,16 +115,16 @@ function select(state, selector) {
   }
 
   return keys.map(function(key) {
-    return just.get(state, key);
+    return just.get(seed, key);
   });
 }
 
 export default function() {
-  var state = {};
+  var seed = {};
   var handlers = [];
 
-  function getState() {
-    return state;
+  function getSeed() {
+    return seed;
   }
 
   function onUpdate(selector, onChange) {
@@ -132,9 +132,9 @@ export default function() {
 
     function handleChange() {
       var previousSelection = selection;
-      selection = select(state, selector);
+      selection = select(seed, selector);
       if (!just.compare(previousSelection, selection)) {
-        onChange.apply(this, selection.concat([state]));
+        onChange.apply(this, selection.concat([seed]));
       }
     }
 
@@ -147,12 +147,12 @@ export default function() {
 
     function handleChange() {
       var previousSelection = selection;
-      selection = selector(state);
+      selection = selector(seed);
       if (!previousSelection && selection) {
-        onTrue(state);
+        onTrue(seed);
       }
       if (onFalse && previousSelection && !selection) {
-        onFalse(state);
+        onFalse(seed);
       }
     }
 
@@ -160,11 +160,9 @@ export default function() {
     handleChange();
   }
 
-  function write(scope) {
-    state[scope] = {};
-
+  function addState(scope) {
     function prefix(props) {
-      if (typeof props == "string") {
+      if (typeof props === "string") {
         props = props.split(".");
       }
       props.unshift(scope);
@@ -174,7 +172,7 @@ export default function() {
 
     function update(props, value) {
       props = prefix(props);
-      just.set(state, props, value);
+      just.set(seed, props, value);
       handlers.forEach(function(handler) {
         handler();
       });
@@ -183,16 +181,20 @@ export default function() {
     function get(props) {
       props = prefix(props);
 
-      return just.get(state, props);
+      return just.get(seed, props);
     }
 
-    return {
-      get: get,
-      update: update
+    return function initState(state = {}) {
+      seed[scope] = state;
+
+      return {
+        get: get,
+        update: update
+      };
     };
   }
 
-  function read() {
+  function getListener() {
     return {
       onUpdate: onUpdate,
       onMatch: onMatch
@@ -200,8 +202,8 @@ export default function() {
   }
 
   return {
-    getState: getState,
-    write: write,
-    read: read
+    getSeed: getSeed,
+    addState: addState,
+    getListener: getListener
   };
 }
