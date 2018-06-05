@@ -2,10 +2,11 @@
   "name": "magasin",
   "version": "0.1.0",
   "description": "Tiny JavaScript library to handle state update subscription",
-  "main": "magasin.js",
+  "main": "lib/magasin.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "minify": "uglifyjs --compress  -o magasin.min.js -- magasin.js"
+    "build": "babel src -d lib",
+    "format": "prettier --write src/*.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,8 @@
   },
   "homepage": "https://github.com/tzi/magasin#readme",
   "devDependencies": {
-    "uglify-js": "^3.3.13"
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "prettier": "^1.13.4"
   }
 }
