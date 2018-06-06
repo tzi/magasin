@@ -74,8 +74,8 @@ module.exports = function() {
     return unsubscribe;
   }
 
-  function addState(scope) {
-    const prefix = chain => `${scope}.${chain}`;
+  function addState(stateName) {
+    const prefix = chain => `${stateName}.${chain}`;
 
     function update(chain, value) {
       seed.set(prefix(chain), value);
@@ -88,13 +88,14 @@ module.exports = function() {
       return seed.get(prefix(chain));
     }
 
-    return function initState(state = {}) {
-      seed.set(scope, state);
+    return function initState(initialState = {}) {
+      seed.set(stateName, initialState);
       Object.values(handlers).forEach(handler => {
         handler.update();
       });
 
       return {
+        name: stateName,
         get,
         update
       };
