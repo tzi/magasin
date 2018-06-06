@@ -19,12 +19,23 @@ describe('Magasin', () => {
   });
 
   describe('.onUpdate()', () => {
-    it('should give the right value', () => {
+    it('should give the value', () => {
       listener.onUpdate('character.where', where => {
         assert.equal(where, 'Castelcerf');
       });
       state.update('firstName', 'Fitz');
       state.update('where', 'Castelcerf');
+    });
+
+    it('should support object selection', () => {
+      let count = 0;
+      listener.onUpdate('character', character => {
+        count++;
+        assert.equal(character.firstName, 'Fitz');
+      });
+      state.update('firstName', 'Fitz');
+      state.update('where', 'Castelcerf');
+      assert.equal(count, 2);
     });
 
     it('should be updated three times', () => {

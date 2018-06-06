@@ -1,4 +1,3 @@
-const compare = require("just-compare");
 const createSeed = require("./createSeed");
 
 const toArray = mixed => (Array.isArray(mixed) ? mixed : [mixed]);
@@ -22,7 +21,7 @@ module.exports = function() {
     function check() {
       const previousSelection = selection;
       update();
-      if (!compare(previousSelection, selection)) {
+      if (previousSelection.some((element, index) => element !== selection[index])) {
         onChange.apply(this, selection.concat([unsubscribe, seed.get]));
       }
     }
@@ -31,11 +30,11 @@ module.exports = function() {
       selection = select(seed, selector);
     }
 
-    update();
     const unsubscribe = registerHandler({
       check,
       update
     });
+    update();
 
     return unsubscribe;
   }
@@ -58,11 +57,11 @@ module.exports = function() {
       selection = select(seed, selector).every(Boolean);
     }
 
-    check();
     const unsubscribe = registerHandler({
       check,
       update
     });
+    check();
 
     return unsubscribe;
   }
@@ -90,7 +89,7 @@ module.exports = function() {
     }
 
     return function initState(state = {}) {
-      seed[scope] = state;
+      seed.set(scope, state);
       Object.values(handlers).forEach(handler => {
         handler.update();
       });

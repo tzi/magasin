@@ -27,7 +27,6 @@
     "prettier": "^1.13.4"
   },
   "dependencies": {
-    "just-compare": "^1.2.2",
     "just-safe-get": "^1.2.1",
     "just-safe-set": "^2.0.1"
   }
